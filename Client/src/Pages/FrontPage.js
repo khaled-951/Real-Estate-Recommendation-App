@@ -9,7 +9,7 @@ export default function FrontPage(){
     return <>
     <Header showSearchInHeader={"false"} isloggedIn={localStorage.getItem('authToken') !== null } />
     <SearchField/>
-    <ShowPropertiesComponent/>
+    <ShowPropertiesComponent headerText="Most Viewed Properties !" />
     <Footer/>
   </>
 }

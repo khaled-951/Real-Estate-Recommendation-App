@@ -13,9 +13,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import PersonIcon from '@material-ui/icons/Person';
-import ScheduleIcon from '@material-ui/icons/Schedule';
+import HomeIcon from '@material-ui/icons/Home';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Button from '@material-ui/core/Button';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
@@ -134,10 +132,8 @@ const useStyles = makeStyles((theme) => ({
       open={isLeftMenuOpen}
       onClose={handleLeftMenuClose}
     >
+      <MenuItem onClick={() => history.push("/") }><HomeIcon/>Home</MenuItem>
       <MenuItem onClick={handleLeftMenuClose}><ShoppingCartIcon/>Buy A Proprety</MenuItem>
-      <MenuItem onClick={handleLeftMenuClose}><AttachMoneyIcon/>Sell A Proprety</MenuItem>
-      <MenuItem onClick={handleLeftMenuClose}><ScheduleIcon/>Rent A Proprety</MenuItem>
-      <MenuItem onClick={handleLeftMenuClose}><PersonIcon/>Find An Agent</MenuItem>
     </Menu>
   );
 
@@ -181,12 +177,10 @@ const useStyles = makeStyles((theme) => ({
         </IconButton>
         <p>Profile</p>
       </MenuItem>
-      : <MenuItem  onClick={() => history.push("/login") }><VpnKeyIcon/> Login</MenuItem> }
+      : <MenuItem  onClick={() => history.push("/login") }><VpnKeyIcon style={{ "padding-right" : "10px" }}/> Login</MenuItem> }
       
     </Menu>
   );
-
-  console.log(props.isloggedIn);
 
   return (
     <div className={classes.grow}>
@@ -229,7 +223,7 @@ const useStyles = makeStyles((theme) => ({
               color="inherit"
             >
               <AccountCircle />
-            </IconButton>: <Button color="inherit" onClick={() => history.push("/login") } >Login</Button> }
+            </IconButton>: <Button color="inherit" onClick={() => history.push("/login") } ><VpnKeyIcon style={{ "padding-right" : "10px" }}/>Login</Button> }
           </div>
           <div className={classes.sectionMobile}>
             <IconButton
