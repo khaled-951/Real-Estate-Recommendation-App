@@ -16,11 +16,15 @@ import ViewPropertyCard from './ViewPropertyCard';
 
 const useStyles = makeStyles({
     root: {
-      maxWidth: 345,
-      marginRight: "25px",
-      marginLeft: "25px",
-      marginTop: "10px",
-      marginBottom: "10px"
+        backgroundColor: "white",
+        minWidth: 280,
+        border: "10px solid lightblue",
+        borderRadius: "25px",
+        marginTop: "10px",
+        maxWidth: "75vw",
+        height: "100%",
+        maxHeight: "80vh",
+        overflow: "auto"
     },
     hClass: {
         textAlign: "center",
@@ -37,7 +41,7 @@ const useStyles = makeStyles({
     return <Slide direction="up" ref={ref} {...props} />;
   });
 
-export default function ShowPropertiesComponent(props){
+export default function SearchResultsComponent(props){
     const history = useHistory();
     const classes = useStyles();
     const [openSuccess, setOpenSuccess] = React.useState(false);
@@ -77,9 +81,9 @@ export default function ShowPropertiesComponent(props){
 
     return (
     <>
-    <Container >
+    <Container className={classes.root} >
         <h1 className={classes.hClass} >{ props.headerText }</h1>
-        <Box display="flex" flexWrap="wrap" justifyContent="center">
+        <Box display="flex" flexWrap="wrap" justifyContent="center" style={{ "height" : "100%", "background-color" : "white" }} >
             <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites} />
             <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>
             <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>

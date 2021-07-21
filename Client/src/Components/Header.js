@@ -203,6 +203,7 @@ const useStyles = makeStyles((theme) => ({
               <SearchIcon />
             </div>
             <InputBase
+            defaultValue={ props.searchQuery && props.searchQuery}
               placeholder="Search…"
               classes={{
                 root: classes.inputRoot,

@@ -6,6 +6,7 @@ import SignUpPage from './Pages/SignUpPage';
 import ForgotPasswordPage from './Pages/ForgotPasswordPage';
 import ErrorPage from './Pages/ErrorPage';
 import ViewPropertyPage from './Pages/ViewPropertyPage';
+import SearchPage from './Pages/SearchPage';
 
 function App() {
   return (
@@ -16,6 +17,8 @@ function App() {
           <Route path="/signup"><SignUpPage /></Route>
           <Route path="/forgotpassword"><ForgotPasswordPage /></Route>
           <Route path="/property/:propertyId"><ViewPropertyPage /></Route>
+          <Route path="/search/:searchQuery"><SearchPage /></Route>
+          <Route path="/search"><SearchPage /></Route>
           <Route path="*"><ErrorPage /></Route>
         </Switch>
     </Router>
