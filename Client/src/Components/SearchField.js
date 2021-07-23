@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
     imgfluid:{
@@ -28,15 +29,26 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
+  
+
 export default function SearchField(){
     const classes = useStyles();
+    const history = useHistory();
+
+    useEffect(() => { document.getElementById('standard-basic').focus() });
+
+    const handleSearchRedirect = (e) => {
+        e.preventDefault();
+        if(document.getElementById('standard-basic').value)
+            history.push('/search/' + document.getElementById('standard-basic').value);
+  };
 
     return <>
-        <form className={classes.searchForm} noValidate autoComplete="off">
+        <form className={classes.searchForm} noValidate autoComplete="off" onSubmit={handleSearchRedirect} >
             <h1 className={classes.slogan} >Your Dream Home Awaits</h1>
             <TextField className={classes.SearchField} id="standard-basic" placeholder="Search For A Location, Agent or ZIP Code" />
         </form>
-        <img src="house.jpg" className={classes.imgfluid} alt="House" />
+        <img src="/house.jpg" className={classes.imgfluid} alt="House" />
         <hr className={classes.hrClass}/>
     </>
 }

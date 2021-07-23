@@ -121,6 +121,11 @@ const useStyles = makeStyles((theme) => ({
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleSearchRedirect = (e) => {
+    if( e.keyCode === 13 ) //13 = Enter
+      history.push('/search/' + e.target.value);
+  };
+
   const leftMenuId = 'primary-left-menu';
   const renderLeftMenu = (
     <Menu
@@ -133,7 +138,7 @@ const useStyles = makeStyles((theme) => ({
       onClose={handleLeftMenuClose}
     >
       <MenuItem onClick={() => history.push("/") }><HomeIcon/>Home</MenuItem>
-      <MenuItem onClick={handleLeftMenuClose}><ShoppingCartIcon/>Buy A Proprety</MenuItem>
+      <MenuItem onClick={() => history.push('/search')}><ShoppingCartIcon/>Buy A Proprety</MenuItem>
     </Menu>
   );
 
@@ -203,7 +208,8 @@ const useStyles = makeStyles((theme) => ({
               <SearchIcon />
             </div>
             <InputBase
-            defaultValue={ props.searchQuery && props.searchQuery}
+              defaultValue={ props.searchQuery && props.searchQuery}
+              onKeyDown={ handleSearchRedirect }
               placeholder="Search…"
               classes={{
                 root: classes.inputRoot,
