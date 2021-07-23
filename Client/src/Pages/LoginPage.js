@@ -38,8 +38,8 @@ export default function LoginPage() {
         />
         <CardContent>
             <form noValidate autoComplete="off">
-                <TextField id="standard-basic" style={{width: "100%"}} label="Username or Email" />
-                <TextField id="standard-basic" style={{width: "100%"}} type="password" label="Password" />
+                <TextField style={{width: "100%"}} label="Username or Email" />
+                <TextField style={{width: "100%"}} type="password" label="Password" />
                 <Link to="/ForgotPassword" >Forgot Your Password ?</Link><br/>
                 <Link to="/signup" >No Account ? No Problem, Sign Up Here !</Link>
             </form>

@@ -47,18 +47,18 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 export default function FiltersList(props){
-    const classes = useStyles();    
+    const classes = useStyles();
     
     return(
     <Container  className={ classes.containerStyle } >
-        <Card raised="true" className={ classes.cardStyle } >
+        <Card raised={true} className={ classes.cardStyle } >
             <CardContent>
                 <Typography gutterBottom>123,450 Properties Found !</Typography>
                 <Typography gutterBottom>Price Range: </Typography>
                 <Box display="flex">
-                  <TextField className={classes.minPriceStyle} value={props.minPriceState} onChange={ e => {props.setMinPriceState(e.target.value)} }
+                  <TextField className={classes.minPriceStyle} value={ props.minPriceState || '' } onChange={ e => {props.setMinPriceState(e.target.value)} }
                    label="Min :" type="number" InputLabelProps={{ shrink: true, }} variant="outlined" />
-                  <TextField value={props.maxPriceState} onChange={ e => {props.setMaxPriceState(e.target.value)} } 
+                  <TextField value={props.maxPriceState || ''} onChange={ e => {props.setMaxPriceState(e.target.value)} } 
                   label="Max :" type="number" InputLabelProps={{ shrink: true, }} variant="outlined" />
                 </Box>
                 <Typography gutterBottom>Bedrooms: </Typography>

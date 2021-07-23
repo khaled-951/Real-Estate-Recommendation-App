@@ -37,7 +37,7 @@ export default function ViewPropertyCard(props) {
     return (
         <>
         <Grow in={true}>
-            <Card raised="true" className={classes.root}>
+            <Card raised={true} className={classes.root}>
                 <CardActionArea onClick={() => handleRedirect(1)}>
                     <CardMedia component="img" alt="Contemplative Reptile" height="140" image="/house.jpg" title="Contemplative Reptile" />
                     <CardContent>

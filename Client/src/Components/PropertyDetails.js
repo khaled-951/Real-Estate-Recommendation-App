@@ -47,7 +47,7 @@ export default function PropertyDetails() {
           <CardMedia className={classes.imageStyle} component="img" alt="Contemplative Reptile" width="100%" height="auto" image="/house.jpg" title="Contemplative Reptile" />
         </Grow>
         <Grow in={true}>
-            <Card raised="true" className={classes.detailsStyle}>
+            <Card raised={true} className={classes.detailsStyle}>
                     <CardContent>
                         <Typography gutterBottom variant="h6" component="h6">Price: $123,450.00</Typography>
                         <Typography gutterBottom variant="h6" component="h6">Date: 19/07/2021</Typography>

@@ -83,7 +83,7 @@ export default function SearchResultsComponent(props){
     <>
     <Container className={classes.root} >
         <h1 className={classes.hClass} >{ props.headerText }</h1>
-        <Box display="flex" flexWrap="wrap" justifyContent="center" style={{ "height" : "100%", "background-color" : "white" }} >
+        <Box display="flex" flexWrap="wrap" justifyContent="center" style={{ "height" : "100%", "backgroundColor" : "white" }} >
             <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites} />
             <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>
             <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>

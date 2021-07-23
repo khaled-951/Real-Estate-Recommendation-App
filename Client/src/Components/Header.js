@@ -182,7 +182,7 @@ const useStyles = makeStyles((theme) => ({
         </IconButton>
         <p>Profile</p>
       </MenuItem>
-      : <MenuItem  onClick={() => history.push("/login") }><VpnKeyIcon style={{ "padding-right" : "10px" }}/> Login</MenuItem> }
+      : <MenuItem  onClick={() => history.push("/login") }><VpnKeyIcon style={{ "paddingRight" : "10px" }}/> Login</MenuItem> }
       
     </Menu>
   );
@@ -208,8 +208,10 @@ const useStyles = makeStyles((theme) => ({
               <SearchIcon />
             </div>
             <InputBase
-              defaultValue={ props.searchQuery && props.searchQuery}
+              
+              value={props.searchQuery || ''}
               onKeyDown={ handleSearchRedirect }
+              onChange={ (e) => props.setSearchQueryState(e.target.value) }
               placeholder="Search…"
               classes={{
                 root: classes.inputRoot,
@@ -230,7 +232,7 @@ const useStyles = makeStyles((theme) => ({
               color="inherit"
             >
               <AccountCircle />
-            </IconButton>: <Button color="inherit" onClick={() => history.push("/login") } ><VpnKeyIcon style={{ "padding-right" : "10px" }}/>Login</Button> }
+            </IconButton>: <Button color="inherit" onClick={() => history.push("/login") } ><VpnKeyIcon style={{ "paddingRight" : "10px" }}/>Login</Button> }
           </div>
           <div className={classes.sectionMobile}>
             <IconButton

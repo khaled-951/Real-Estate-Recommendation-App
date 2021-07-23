@@ -12,6 +12,7 @@ const propertyTypes = ['Appartment', 'Commercial', 'House'];
 
 export default function SearchPage(){
     const { searchQuery } = useParams();
+    const [searchQueryState, setSearchQueryState] = React.useState(searchQuery);
     const [stateNames, setStateNames] = React.useState([]);
     const [propertyTypesState, setPropertyTypesState] = React.useState([]);
     const [minPriceState, setMinPriceState] = React.useState();
@@ -19,7 +20,7 @@ export default function SearchPage(){
     const [airConditionedState, setAirConditionedState] = React.useState({ checkedA: false, checkedB: false, });
     const [heatedState, setHeatedState] = React.useState({ checkedA: false, checkedB: false, });
     const [hasSportsState, setHasSportsState] = React.useState({ checkedA: false, checkedB: false, });
-    const [chipData, setChipData] = React.useState([{ key: 0, label: 'SearchQuery: ' + searchQuery }]);
+    const [chipData, setChipData] = React.useState( searchQueryState ? [{ key: 0, label: 'SearchQuery: ' + searchQueryState }] : [] );
     const [bedroomsState, setBedroomsState] = React.useState();
 
     const handleStateNamesChange = (event) => { setStateNames(event.target.value); };
@@ -31,11 +32,11 @@ export default function SearchPage(){
     const handleChipDelete = (chipToDelete) => () => {
         setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
         if(chipToDelete.key === 0)
-            setAirConditionedState({ ...airConditionedState, 'checkedA': false });
+            setSearchQueryState("");
         else if(chipToDelete.key === 1)
-            setMinPriceState(undefined);
+            setMinPriceState("");
         else if(chipToDelete.key === 2)
-            setMaxPriceState(0);
+            setMaxPriceState("");
         else if(chipToDelete.key === 3)
             setBedroomsState("");
         else if(chipToDelete.key === 4)
@@ -56,7 +57,9 @@ export default function SearchPage(){
 
     return (
         <>
-            <Header showSearchInHeader={"true"} searchQuery={searchQuery } isloggedIn={localStorage.getItem('authToken') !== null } />
+            <Header showSearchInHeader={"true"} searchQuery={searchQueryState} 
+            setSearchQueryState={(e) => { if(!e) handleChipDeleteSync({ key: 0 }); else handleChipUpdateSync({ key: 0, label: 'Search Query: ' + e });setSearchQueryState(e) } } 
+            isloggedIn={localStorage.getItem('authToken') !== null } />
             <AppliedFilters handleChipAdd={handleChipAdd} handleChipDelete={handleChipDelete} chipData={chipData} />
             <Box display="flex" flexWrap="wrap" justifyContent="center">
                 <FiltersList airConditionedState={ airConditionedState } 
@@ -72,7 +75,7 @@ export default function SearchPage(){
                 handleStateNamesChange={(e) => { if(e.target.value.length === 0) handleChipDeleteSync({ key: 7 }); else handleChipUpdateSync({ key: 7, label: 'States: ' + e.target.value }); handleStateNamesChange(e) } }
                 handlePropertyTypesChange={(e) => { if(e.target.value.length === 0) handleChipDeleteSync({ key: 8 }); else handleChipUpdateSync({ key: 8, label: 'Property Types: ' + e.target.value }); handlePropertyTypesChange(e) } }
                 />
-                <SearchResultsComponent/>
+                <SearchResultsComponent chipData={chipData} />
             </Box>
             <Footer/>
         </>

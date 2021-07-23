@@ -33,15 +33,15 @@ export default function SignUpPage() {
         </Typography>
         <CardMedia
           className={classes.media}
-          image="loginlogo.png"
+          image="/loginlogo.png"
           title="Login Form"
         />
         <CardContent>
             <form noValidate autoComplete="off">
-                <TextField id="standard-basic" style={{width: "100%"}} label="Username" />
-                <TextField id="standard-basic" style={{width: "100%"}} type="email" label="Email" />
-                <TextField id="standard-basic" style={{width: "100%"}} type="password" label="Password" />
-                <TextField id="standard-basic" style={{width: "100%"}} type="password" label="Repeat Password" />
+                <TextField style={{width: "100%"}} label="Username" />
+                <TextField style={{width: "100%"}} type="email" label="Email" />
+                <TextField style={{width: "100%"}} type="password" label="Password" />
+                <TextField style={{width: "100%"}} type="password" label="Repeat Password" />
                 <Link to="/login" >Already Have An Account ? Login Here !</Link>
             </form>
         </CardContent>
