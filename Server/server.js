@@ -39,6 +39,6 @@ app.use(function(err, req, res, next) {
   });
   
 
-mongoose.connect('mongodb+srv://khaled:khaled@cluster0.ajsco.mongodb.net/stage?authSource=admin&replicaSet=atlas-zv7ysq-shard-0&readPreference=primary&ssl=true',
+mongoose.connect('mongodb+srv://khaled@cluster0.ajsco.mongodb.net/stage?authSource=admin&replicaSet=atlas-zv7ysq-shard-0&readPreference=primary&ssl=true',
  {useNewUrlParser: true, useUnifiedTopology: true}).catch(() => console.log('could not connect to DB'));
 app.listen(process.env.port);
