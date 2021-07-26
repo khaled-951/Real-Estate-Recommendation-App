@@ -42,13 +42,14 @@ router.post('/login', async (req, res) => {
     }
         if( await bcrypt.compare(req.body.password, foundUser.password) )
             return res.status(200).send(
-                jwt.sign({ username: foundUser.username, email: foundUser.email }, process.env.JWT_ACCESS_TOKEN, { algorithm: 'HS256', expiresIn: '30m' } ) );
+                jwt.sign({ id: foundUser._id, username: foundUser.username, email: foundUser.email }, process.env.JWT_ACCESS_TOKEN, { algorithm: 'HS256', expiresIn: '30m' } ) );
 });
 
 router.post('/verify', async (req, res) => {
-    if( !req.body.accessToken ) return res.status(400).send('Verify Your Inputs Please');
+    if( !req.get('Authorization') ) return res.status(400).send('Verify Your Inputs Please');
     try{
-        return res.status(200).send(await jwt.verify(req.body.accessToken, process.env.JWT_ACCESS_TOKEN, { algorithm: 'HS256' } ));
+        console.log(req.get('Authorization').split(" ")[1]);
+        return res.status(200).send(await jwt.verify(req.get('Authorization').split(" ")[1], process.env.JWT_ACCESS_TOKEN, { algorithm: 'HS256' } ));
     }
     catch(e) { return res.status(400).send('Token Expired'); }
 });

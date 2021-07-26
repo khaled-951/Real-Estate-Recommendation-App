@@ -7,16 +7,42 @@ const userSchema = require('../models/user');
 const User = mongoose.model('user', userSchema);
 const propertySchema = require('../models/property');
 const Property = mongoose.model('properties', propertySchema);
+const authorized = require('../middlewares/authorized');
 
-router.get('/addToFavorites', async (req, res) => {
-    res.status(200).send(await User.findById("60fc6c7d103a1f3be8f43ffe"));
-    const newFav = new Favorit({ userId: await User.findById("60fc6c7d103a1f3be8f43ffe"),
-        properties: await Property.findById("60c0b92d31a464183853a9ba")});
-    newFav.save();
+router.post('/toggleFavorit', authorized, async (req, res) => {
+    if( !req.body.propertyId ) return res.status(400).send('Provide A Property Id Please');
+    const foundProperty = await Property.findById(req.body.propertyId);
+    
+    if(!foundProperty) return res.status(400).send('Property Does Not Exist');
+    
+    const userFavList = await Favorit.findOne({ userId: req.user.id });
+    
+    if( !userFavList )
+    {
+        const newFav = new Favorit({ userId: req.user.id, properties: [foundProperty] });
+        newFav.save();
+        return res.status(200).send('Favorit Added');
+    }
+    else
+    {
+        if(userFavList.properties.includes(req.body.propertyId))
+        {
+            userFavList.properties = userFavList.properties.filter( property => property.toString() !== req.body.propertyId );
+            console.log(userFavList.save());
+            return res.status(200).send('Favorit Removed');
+        }
+        else if(!userFavList.properties.includes(req.body.propertyId))
+        {
+            userFavList.properties.push(foundProperty);
+            userFavList.save();
+            return res.status(200).send('Favorit Added');
+        }
+    }
+    return res.status(400).send('Error');
 });
 
-router.get('/removeFromFavorites', (req, res) => {
-
+router.get('/getUserFavorites/:pageId', authorized, async (req, res) => {
+    return res.status(200).send(await Favorit.find( {userId: req.user.id}).skip(6 * Number(req.params.pageId)).limit(6));
 });
 
 module.exports = router ;
