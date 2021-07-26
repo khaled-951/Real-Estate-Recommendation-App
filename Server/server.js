@@ -1,8 +1,6 @@
 const express = require('express');
 const app = express();
 const dotenv = require('dotenv').config();
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 const path = require('path');
 const mongoose = require('mongoose');
 const logger = require('morgan');
@@ -19,15 +17,7 @@ app.use('/api/property', properties);
 app.use('/api/favorit', favorit);
 
 app.get( '/', authorized, (req, res) =>{
-    res.send({ accessToken: jwt.sign({ burh: 'howdy'}, process.env.JWT_ACCESS_TOKEN)});
-});
-
-app.get( '/bcrypt', (req, res) =>{
-    bcrypt.hash('howdy', 10, function(err, hash) {
-        if(err) return res.sendStatus(404);
-        res.send({ bcrypt: hash });
-    });
-    
+    res.send(req.user);
 });
 
 app.use(function(err, req, res, next) {
