@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const logger = require('morgan');
 const users = require('./routes/users');
 const properties = require('./routes/properties');
+const favorit = require('./routes/favorites');
 const authorized = require('./middlewares/authorized');
 
 app.use(express.json());
@@ -15,6 +16,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
 app.use('/api/user', users);
 app.use('/api/property', properties);
+app.use('/api/favorit', favorit);
 
 app.get( '/', authorized, (req, res) =>{
     res.send({ accessToken: jwt.sign({ burh: 'howdy'}, process.env.JWT_ACCESS_TOKEN)});
@@ -39,6 +41,5 @@ app.use(function(err, req, res, next) {
   });
   
 
-mongoose.connect('mongodb+srv://khaled@cluster0.ajsco.mongodb.net/stage?authSource=admin&replicaSet=atlas-zv7ysq-shard-0&readPreference=primary&ssl=true',
- {useNewUrlParser: true, useUnifiedTopology: true}).catch(() => console.log('could not connect to DB'));
+mongoose.connect(process.env.MONGODB_URI,{useNewUrlParser: true, useUnifiedTopology: true}).catch(() => console.log('could not connect to DB'));
 app.listen(process.env.port);

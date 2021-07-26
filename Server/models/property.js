@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema  = mongoose.Schema;
 
 const propertySchema = new Schema({
+    _id: String,
     link:  String,
     reference: String,
     dateAnnonce:   String,
@@ -22,13 +23,13 @@ const propertySchema = new Schema({
     constructible:   String,
     service: String,
     chauffage: String,
-    climatization:  String,
+    climatisation:  String,
     cuisine: String,
     installations_sportives:   String,
     tel: String,
     agence: String,
     description:  String,
-    views: String,
+    views: Number,
 });
 
 module.exports = propertySchema ;
