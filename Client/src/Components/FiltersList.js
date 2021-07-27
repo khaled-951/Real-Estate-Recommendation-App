@@ -53,7 +53,7 @@ export default function FiltersList(props){
     <Container  className={ classes.containerStyle } >
         <Card raised={true} className={ classes.cardStyle } >
             <CardContent>
-                <Typography gutterBottom>123,450 Properties Found !</Typography>
+                <Typography gutterBottom>{props.resultsCount} Properties Found !</Typography>
                 <Typography gutterBottom>Price Range: </Typography>
                 <Box display="flex">
                   <TextField className={classes.minPriceStyle} value={ props.minPriceState || '' } onChange={ e => {props.setMinPriceState(e.target.value)} }
@@ -65,11 +65,11 @@ export default function FiltersList(props){
                 <div className={classes.bedsStyle}>
                   <ButtonGroup color="primary" aria-label="outlined primary button group">
                     <Button variant={ props.bedroomsState === '0' && "contained" } onClick={() => props.setBedroomsState('0') } >Studio</Button>
-                    <Button variant={ props.bedroomsState === '1' && "contained" } onClick={() => props.setBedroomsState('1') } >1+</Button>
-                    <Button variant={ props.bedroomsState === '2' && "contained" } onClick={() => props.setBedroomsState('2') }>2+</Button>
-                    <Button variant={ props.bedroomsState === '3' && "contained" } onClick={() => props.setBedroomsState('3') }>3+</Button>
-                    <Button variant={ props.bedroomsState === '4' && "contained" } onClick={() => props.setBedroomsState('4') }>4+</Button>
-                    <Button variant={ props.bedroomsState === '5' && "contained" } onClick={() => props.setBedroomsState('5') }>5+</Button>
+                    <Button variant={ props.bedroomsState === '1' && "contained" } onClick={() => props.setBedroomsState('1') } >1</Button>
+                    <Button variant={ props.bedroomsState === '2' && "contained" } onClick={() => props.setBedroomsState('2') }>2</Button>
+                    <Button variant={ props.bedroomsState === '3' && "contained" } onClick={() => props.setBedroomsState('3') }>3</Button>
+                    <Button variant={ props.bedroomsState === '4' && "contained" } onClick={() => props.setBedroomsState('4') }>4</Button>
+                    <Button variant={ props.bedroomsState === '5' && "contained" } onClick={() => props.setBedroomsState('5') }>5</Button>
                   </ButtonGroup>
                 </div>
                 <Grid container direction="row" justifyContent="space-between" alignItems="center">

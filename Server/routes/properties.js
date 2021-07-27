@@ -57,7 +57,23 @@ router.post('/searchQuery/:page', async (req, res) => {
         findQuery = { ...findQuery, typeImm: { $in: req.body.typeImm }  } ;
 
     console.log(findQuery);
-    return res.status(200).send(await Property.find(findQuery).skip(6 * Number(req.params.page) ).limit(6) );
+    //await Property.find(findQuery).skip(6 * Number(req.params.page) ).limit(6)
+    const resu = await Property.aggregate( [ { $match: findQuery }, {
+        "$facet": {
+          "results": [
+            { "$skip": 6 * Number(req.params.page) },
+            { "$limit": 6 }
+          ],
+          "resultsCount": [
+            { "$count": "total" }
+          ]
+        }
+      } ] ) ;
+      //console.log(resu[0].resultsCount[0].total);
+    return res.status(200).send({ results: resu[0]?.results,
+         resultsCount: resu[0]?.resultsCount[0]?.total});
+    /*return res.status(200).send({ results: await Property.find(findQuery).skip(6 * Number(req.params.page) ).limit(6),
+         resultsCount: await Property.countDocuments(findQuery)});*/
 });
 
 module.exports = router ;
