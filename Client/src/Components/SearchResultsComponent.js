@@ -14,6 +14,7 @@ import Slide from '@material-ui/core/Slide';
 import { useHistory } from 'react-router-dom';
 import ViewPropertyCard from './ViewPropertyCard';
 import axios from 'axios';
+import Pagination from '@material-ui/lab/Pagination';
 
 const useStyles = makeStyles({
     root: {
@@ -46,11 +47,12 @@ export default function SearchResultsComponent(props){
     const history = useHistory();
     const classes = useStyles();
     const [results, setResults] = React.useState([]);
+    const [pageNumberState, setPageNumberState] = React.useState(0);
     const [openSuccess, setOpenSuccess] = React.useState(false);
     const [openError, setOpenError] = React.useState(false);
     const [openDialog, setOpenDialog] = React.useState(false);
 
-    React.useEffect(() => axios.post(process.env.REACT_APP_BACKEND_API + '/property/searchQuery/0', {
+    React.useEffect(() => axios.post(process.env.REACT_APP_BACKEND_API + '/property/searchQuery/' + pageNumberState, {
       searchQuery: props.chipData.filter(chip => chip.key === 0)[0]?.label.slice(13),
       bedrooms: props.chipData.filter(chip => chip.key === 3)[0]?.label.slice(10),
       airConditioned: props.chipData.filter(chip => chip.key === 4)[0] ? true : undefined,
@@ -58,7 +60,7 @@ export default function SearchResultsComponent(props){
       hasSportsEquipment: props.chipData.filter(chip => chip.key === 6)[0] ? true : undefined,
       states: props.chipData.filter(chip => chip.key === 7)[0]?.label.slice(8).split(','),
       typeImm: props.chipData.filter(chip => chip.key === 8)[0]?.label.slice(16).split(',')
-    }).then(data => setResults(data.data) ), [props.chipData]);
+    }).then(data => { setResults(data.data); props.setResultsCount(data.data.resultsCount); } ), [pageNumberState, props.chipData]);
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') { return; }
@@ -96,10 +98,15 @@ export default function SearchResultsComponent(props){
     <Container className={classes.root} >
         <h1 className={classes.hClass} >{ props.headerText }</h1>
         <Box display="flex" flexWrap="wrap" justifyContent="center" style={{ "height" : "100%", "backgroundColor" : "white" }} >
-          {results.map( (property, index) => {
+          {results?.results?.map( (property, index) => {
               return <ViewPropertyCard key={index} property={property} openSuccess={openSuccess} openError={openError} 
                 handleClose={handleClose} handleFavorites={handleFavorites}/>
             } )}
+        </Box>
+        <Box display="flex" flexWrap="wrap" justifyContent="center" style={{ "height" : "100%", "backgroundColor" : "white" }} >
+        { results.resultsCount > 6 &&
+            <Pagination count={ parseInt(results.resultsCount / 6) } color="primary" onChange={(e, pageNumber) => setPageNumberState(pageNumber - 1)} />
+          }
         </Box>
     </Container>
     <hr className={classes.hrClass}/>

@@ -7,6 +7,7 @@ import PropertyDetails from '../Components/PropertyDetails';
 import axios from 'axios';
 
 export default function ViewPropertyPage() {
+    const [searchQueryState, setSearchQueryState] = React.useState();
     const [propertyDetailsAndRecommended, setPropertyDetailsAndRecommended] = React.useState();
     const { propertyId } = useParams();
     useEffect(() => { document.body.style.backgroundImage=''; 
@@ -14,7 +15,8 @@ export default function ViewPropertyPage() {
         .then(data => setPropertyDetailsAndRecommended(data.data))} , [propertyId]);
     return (
         <>
-            <Header showSearchInHeader={"true"} isloggedIn={localStorage.getItem('authToken') !== null }/>
+            <Header searchQuery={searchQueryState} setSearchQueryState={(e) => setSearchQueryState(e)} showSearchInHeader={"true"} 
+            isloggedIn={localStorage.getItem('authToken') !== null }/>
             <PropertyDetails property={propertyDetailsAndRecommended?.propertyDetails} />
             <ShowPropertiesComponent showProperties={propertyDetailsAndRecommended?.recommended} headerText="Recommended For You" />
             <Footer/>

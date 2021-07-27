@@ -22,6 +22,7 @@ export default function SearchPage(){
     const [hasSportsState, setHasSportsState] = React.useState({ checkedA: false, checkedB: false, });
     const [chipData, setChipData] = React.useState( searchQueryState ? [{ key: 0, label: 'SearchQuery: ' + searchQueryState }] : [] );
     const [bedroomsState, setBedroomsState] = React.useState();
+    const [resultsCount, setResultsCount] = React.useState(0);
 
     const handleStateNamesChange = (event) => { setStateNames(event.target.value); };
     const handlePropertyTypesChange = (event) => { setPropertyTypesState(event.target.value); };
@@ -62,7 +63,7 @@ export default function SearchPage(){
             isloggedIn={localStorage.getItem('authToken') !== null } />
             <AppliedFilters handleChipAdd={handleChipAdd} handleChipDelete={handleChipDelete} chipData={chipData} />
             <Box display="flex" flexWrap="wrap" justifyContent="center">
-                <FiltersList airConditionedState={ airConditionedState } 
+                <FiltersList airConditionedState={ airConditionedState } resultsCount={resultsCount}
                 handleAirConditionedChange={(e) => { if(!e.target.checked) handleChipDeleteSync({ key: 4 }); else handleChipAddSync({ key: 4, label: 'AirConditioned' }); handleAirConditionedChange(e)}}
                 heatedState={heatedState} 
                 handleHeatedChange={(e) => { if(!e.target.checked) handleChipDeleteSync({ key: 5 }); else handleChipAddSync({ key: 5, label: 'Heated' }); handleHeatedChange(e) } }
@@ -75,7 +76,7 @@ export default function SearchPage(){
                 handleStateNamesChange={(e) => { if(e.target.value.length === 0) handleChipDeleteSync({ key: 7 }); else handleChipUpdateSync({ key: 7, label: 'States: ' + e.target.value }); handleStateNamesChange(e) } }
                 handlePropertyTypesChange={(e) => { if(e.target.value.length === 0) handleChipDeleteSync({ key: 8 }); else handleChipUpdateSync({ key: 8, label: 'Property Types: ' + e.target.value }); handlePropertyTypesChange(e) } }
                 />
-                <SearchResultsComponent chipData={chipData} />
+                <SearchResultsComponent setResultsCount={(e) => setResultsCount(e)} chipData={chipData} />
             </Box>
             <Footer/>
         </>
