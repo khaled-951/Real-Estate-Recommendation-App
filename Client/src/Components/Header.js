@@ -126,6 +126,14 @@ const useStyles = makeStyles((theme) => ({
       history.push('/search/' + e.target.value);
   };
 
+  const handleLogOut = () => {
+    if(localStorage.getItem("authToken"))
+      {
+        localStorage.removeItem("authToken");
+        history.push('/login');
+      }
+  }
+
   const leftMenuId = 'primary-left-menu';
   const renderLeftMenu = (
     <Menu
@@ -155,7 +163,7 @@ const useStyles = makeStyles((theme) => ({
     >
       <MenuItem onClick={handleMenuClose}>My Profile</MenuItem>
       <hr/>
-      <MenuItem onClick={handleMenuClose}><ExitToAppIcon/>Logout</MenuItem>
+      <MenuItem onClick={handleLogOut}><ExitToAppIcon/>Logout</MenuItem>
     </Menu>
   );
 

@@ -13,6 +13,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import { useHistory } from 'react-router-dom';
 import ViewPropertyCard from './ViewPropertyCard';
+import axios from 'axios';
 
 const useStyles = makeStyles({
     root: {
@@ -44,9 +45,20 @@ const useStyles = makeStyles({
 export default function SearchResultsComponent(props){
     const history = useHistory();
     const classes = useStyles();
+    const [results, setResults] = React.useState([]);
     const [openSuccess, setOpenSuccess] = React.useState(false);
     const [openError, setOpenError] = React.useState(false);
     const [openDialog, setOpenDialog] = React.useState(false);
+
+    React.useEffect(() => axios.post(process.env.REACT_APP_BACKEND_API + '/property/searchQuery/0', {
+      searchQuery: props.chipData.filter(chip => chip.key === 0)[0]?.label.slice(13),
+      bedrooms: props.chipData.filter(chip => chip.key === 3)[0]?.label.slice(10),
+      airConditioned: props.chipData.filter(chip => chip.key === 4)[0] ? true : undefined,
+      heated: props.chipData.filter(chip => chip.key === 5)[0] ? true : undefined,
+      hasSportsEquipment: props.chipData.filter(chip => chip.key === 6)[0] ? true : undefined,
+      states: props.chipData.filter(chip => chip.key === 7)[0]?.label.slice(8).split(','),
+      typeImm: props.chipData.filter(chip => chip.key === 8)[0]?.label.slice(16).split(',')
+    }).then(data => setResults(data.data) ), [props.chipData]);
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') { return; }
@@ -84,12 +96,10 @@ export default function SearchResultsComponent(props){
     <Container className={classes.root} >
         <h1 className={classes.hClass} >{ props.headerText }</h1>
         <Box display="flex" flexWrap="wrap" justifyContent="center" style={{ "height" : "100%", "backgroundColor" : "white" }} >
-            <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites} />
-            <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>
-            <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>
-            <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>
-            <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>
-            <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>
+          {results.map( (property, index) => {
+              return <ViewPropertyCard key={index} property={property} openSuccess={openSuccess} openError={openError} 
+                handleClose={handleClose} handleFavorites={handleFavorites}/>
+            } )}
         </Box>
     </Container>
     <hr className={classes.hrClass}/>

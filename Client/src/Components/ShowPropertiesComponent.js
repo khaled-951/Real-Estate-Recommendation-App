@@ -75,17 +75,24 @@ export default function ShowPropertiesComponent(props){
         history.push("/login");
     };
 
-    return (
-    <>
-    <Container >
-        <h1 className={classes.hClass} >{ props.headerText }</h1>
-        <Box display="flex" flexWrap="wrap" justifyContent="center">
+    /*<Box display="flex" flexWrap="wrap" justifyContent="center">
             <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites} />
             <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>
             <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>
             <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>
             <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>
             <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>
+        </Box>*/
+
+    return (
+    <>
+    <Container >
+        <h1 className={classes.hClass} >{ props.headerText }</h1>
+        <Box display="flex" flexWrap="wrap" justifyContent="center">
+          {props.showProperties?.map( (property, index) => {
+            return <ViewPropertyCard key={index} property={property} openSuccess={openSuccess} openError={openError} 
+              handleClose={handleClose} handleFavorites={handleFavorites}/>
+          } )}
         </Box>
     </Container>
     <hr className={classes.hrClass}/>

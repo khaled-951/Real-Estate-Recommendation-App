@@ -3,13 +3,16 @@ import Header from '../Components/Header';
 import SearchField from '../Components/SearchField';
 import ShowPropertiesComponent from '../Components/ShowPropertiesComponent';
 import Footer from '../Components/Footer';
+import axios from 'axios';
 
 export default function FrontPage(){
-    useEffect(() => document.body.style.backgroundImage='' );
-    return <>
+  const [mostViewedProperties, setMostViewedProperties] = React.useState([]) ;
+  useEffect(() => {document.body.style.backgroundImage='';
+    axios.get(process.env.REACT_APP_BACKEND_API + '/property/getMostViewed').then( (data) => setMostViewedProperties(data.data));} , []);
+  return <>
     <Header showSearchInHeader={"false"} isloggedIn={localStorage.getItem('authToken') !== null } />
     <SearchField/>
-    <ShowPropertiesComponent headerText="Most Viewed Properties !" />
+    <ShowPropertiesComponent showProperties={mostViewedProperties} headerText="Most Viewed Properties !" />
     <Footer/>
   </>
 }
