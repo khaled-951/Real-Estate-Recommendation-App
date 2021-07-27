@@ -7,8 +7,8 @@ import SearchResultsComponent from '../Components/SearchResultsComponent';
 import { Box } from '@material-ui/core';
 import FiltersList from '../Components/FiltersList';
 
-const states = ['Tunis', 'Ariana', 'Sousse', 'Monastir'];
-const propertyTypes = ['Appartment', 'Commercial', 'House'];
+const states = ['TUNIS', 'ARIANA', 'SOUSSE', 'MONASTIR', 'NABEUL', 'GAFSA', 'GABES', 'KASSERINE', 'JENDOUBA', 'BIZERTE', 'TOZEUR', 'KEIROUAN', 'BEJA'];
+const propertyTypes = ['appartement', 'commerce', 'terrain', 'autres', 'maison'];
 
 export default function SearchPage(){
     const { searchQuery } = useParams();

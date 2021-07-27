@@ -13,7 +13,7 @@ router.get('/getPropertyDetailsAndRecommended/:propId', async (req, res) => {
         recommended: await Property.find().sort({ views: -1}).limit(6) } );
 });
 
-router.get('/searchQuery/:page', async (req, res) => {
+router.post('/searchQuery/:page', async (req, res) => {
     let findQuery = {} ;
 
     if(req.body.searchQuery)
@@ -30,7 +30,7 @@ router.get('/searchQuery/:page', async (req, res) => {
             findQuery = { ...findQuery, price: { $gte: "90�000�000 DT"} } ;
     }*/
     
-    if(req.body.bedrooms === "studio")
+    if(req.body.bedrooms === "0")
         findQuery = { ...findQuery, nbpiece: { $exists: true, $regex: '0' }} ;
     else if(Number(req.body.bedrooms) > 0 && Number(req.body.bedrooms) < 6 )
         findQuery = { ...findQuery, nbpiece: { $exists: true, $regex: req.body.bedrooms[0] }} ;

@@ -38,10 +38,10 @@ export default function ViewPropertyCard(props) {
         <>
         <Grow in={true}>
             <Card raised={true} className={classes.root}>
-                <CardActionArea onClick={() => handleRedirect(1)}>
+                <CardActionArea onClick={() => handleRedirect(props.property?._id || 1)}>
                     <CardMedia component="img" alt="Contemplative Reptile" height="140" image="/house.jpg" title="Contemplative Reptile" />
                     <CardContent>
-                        <Typography gutterBottom variant="h5" component="h2">$123,450.00</Typography>
+                        <Typography gutterBottom variant="h5" component="h2">{ props.property?.price || "N/A" }</Typography>
                         <Typography variant="body2" color="textSecondary" component="p">
                             Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
                             across all continents except Antarctica
@@ -50,8 +50,8 @@ export default function ViewPropertyCard(props) {
                 </CardActionArea>
                 <CardActions>
                     <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                        <Button size="small" color="primary" onClick={() => handleRedirect(1)} >View Property</Button>
-                        <VisibilityIcon/><Typography >123k</Typography>
+                        <Button size="small" color="primary" onClick={() => handleRedirect(props.property?._id || 1)} >View Property</Button>
+                        <VisibilityIcon/><Typography >{ props.property?.views || "N/A" }</Typography>
                         <FormControlLabel onClick={ props.handleFavorites } control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="checkedH" />} />
                     </Grid>
                 </CardActions>

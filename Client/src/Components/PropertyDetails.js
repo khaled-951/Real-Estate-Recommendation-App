@@ -33,11 +33,11 @@ const useStyles = makeStyles({
   }
 });
 
-export default function PropertyDetails() {
+export default function PropertyDetails(props) {
   const classes = useStyles();
 
-  const handleRedirect = (id) => {
-    window.location.replace("https://www.google.fr/");
+  const handleRedirect = (link) => {
+    window.location.replace(link);
 };
 
   return (
@@ -49,36 +49,33 @@ export default function PropertyDetails() {
         <Grow in={true}>
             <Card raised={true} className={classes.detailsStyle}>
                     <CardContent>
-                        <Typography gutterBottom variant="h6" component="h6">Price: $123,450.00</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">Date: 19/07/2021</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">Habitable Area: 120m²</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">Land Surface: 250m²</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">ZIP Code: 1234</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">Delegation: Hammamet</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">localite: n/a</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">Address: 45 rue salah ben youssef hammamet</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">Year Built: 2011</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">Number Of Pieces: 2</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">Type: Commercial</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">fonds: n/a</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">Outdoors: Yes/No</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">Baths: 2</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">constructible: n/a</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">service: n/a</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">Heating/Air-Conditioning: Yes/Yes</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">Kitchen: 1</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">Sports Equipments: n/a</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">Phone: +123456789</Typography>
-                        <Typography gutterBottom variant="h6" component="h6">Agency: Agence Ben Salem</Typography>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                            across all continents except Antarctica
-                        </Typography>
+                        <Typography gutterBottom variant="h6" component="h6">Price: {props.property?.price || 'N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">Date: {props.property?.dateAnnonce || 'N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">Habitable Area: {props.property?.superficie_habitable || 'N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">Land Surface: {props.property?.superficie_terrain || 'N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">ZIP Code: {props.property?.codeP || 'N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">Delegation: {props.property?.delegation || 'N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">localite: {props.property?.localite || 'N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">Address: {props.property?.adresse || 'N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">Year Built: {props.property?.anneeConst || 'N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">Number Of Pieces: {props.property?.nbpiece || 'N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">Type: {props.property?.typeImm || 'N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">fonds: {props.property?.fonds || 'N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">Outdoors: {props.property?.plein_air || 'N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">Baths: {props.property?.salle_de_bain || 'N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">constructible: {props.property?.constructible || 'N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">service: {props.property?.service || 'N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">Heating/Air-Conditioning: {props.property?.chauffage || 'N/A '}/{props.property?.climatisation || ' N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">Kitchen: {props.property?.cuisine || 'N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">Sports Equipments: {props.property?.installations_sportives || 'N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">Phone: {props.property?.tel || 'N/A'}</Typography>
+                        <Typography gutterBottom variant="h6" component="h6">Agency: {props.property?.agence || 'N/A'}</Typography>
+                        <Typography variant="body2" color="textSecondary" component="p">{props.property?.description || 'N/A'}</Typography>
                     </CardContent>
                 <CardActions>
                     <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                        <Button size="small" color="primary" onClick={() => handleRedirect(1)} >Visit The Original Post</Button>
-                        <VisibilityIcon/><Typography >123k</Typography>
+                        <Button size="small" color="primary" onClick={() => handleRedirect(props.property?.link || 'error')} >Visit The Original Post</Button>
+                        <VisibilityIcon/><Typography >{props.property?.views || 'N/A'}</Typography>
                     </Grid>
                 </CardActions>
             </Card>
