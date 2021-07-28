@@ -46,11 +46,13 @@ const useStyles = makeStyles({
 export default function SearchResultsComponent(props){
     const history = useHistory();
     const classes = useStyles();
+    const [checkedState, setCheckedState] = React.useState([false, false, false, false, false, false]);
     const [results, setResults] = React.useState([]);
     const [pageNumberState, setPageNumberState] = React.useState(0);
     const [openSuccess, setOpenSuccess] = React.useState(false);
     const [openError, setOpenError] = React.useState(false);
     const [openDialog, setOpenDialog] = React.useState(false);
+
 
     React.useEffect(() => axios.post(process.env.REACT_APP_BACKEND_API + '/property/searchQuery/' + pageNumberState, {
       searchQuery: props.chipData.filter(chip => chip.key === 0)[0]?.label.slice(13),
@@ -60,7 +62,10 @@ export default function SearchResultsComponent(props){
       hasSportsEquipment: props.chipData.filter(chip => chip.key === 6)[0] ? true : undefined,
       states: props.chipData.filter(chip => chip.key === 7)[0]?.label.slice(8).split(','),
       typeImm: props.chipData.filter(chip => chip.key === 8)[0]?.label.slice(16).split(',')
-    }).then(data => { setResults(data.data); props.setResultsCount(data.data.resultsCount); } ), [pageNumberState, props.chipData]);
+    }, { headers: localStorage.getItem('authToken') && {"Authorization": "Bearer: " + localStorage.getItem('authToken')} } )
+    .then(data => { setResults(data.data); props.setResultsCount(data.data.resultsCount); setCheckedState(data.data.favorites); } ), [pageNumberState, props.chipData]);
+
+    React.useEffect( () => {  console.log(checkedState) } , [checkedState]);
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') { return; }
@@ -68,15 +73,17 @@ export default function SearchResultsComponent(props){
         setOpenError(false);
     };
 
-    const handleFavorites = (e) => {
+    const handleFavorites =(e, propertyId, key) => {
+      e.preventDefault();
         if(localStorage.getItem('authToken') !== null){
             handleClose();
-            if(e.target.checked === true)
-                setOpenSuccess(true);
-            else
-                setOpenError(true);
+            axios.post( process.env.REACT_APP_BACKEND_API + '/favorit/toggleFavorit', { propertyId }, 
+                { headers: { 'Authorization' : 'Bearer: ' + localStorage.getItem('authToken')} } )
+                  .then((data) => { 
+                  if(data.data === 'Favorit Added') {setCheckedState( (oldState) => { oldState[key] = true; return oldState;} ); setOpenSuccess(true);  }
+                   else if (data.data === 'Favorit Removed') {setCheckedState( (oldState) => { oldState[key] = false; return oldState;} );  setOpenError(true); } }  );
         }else{
-            e.target.checked = false ;
+            /*props.setMostViewedProperties( (data) => { return { ...data, ...data.favorites[key] = true } } )*/
             setOpenDialog(true);
         }
     };
@@ -100,7 +107,7 @@ export default function SearchResultsComponent(props){
         <Box display="flex" flexWrap="wrap" justifyContent="center" style={{ "height" : "100%", "backgroundColor" : "white" }} >
           {results?.results?.map( (property, index) => {
               return <ViewPropertyCard key={index} property={property} openSuccess={openSuccess} openError={openError} 
-                handleClose={handleClose} handleFavorites={handleFavorites}/>
+              checked={checkedState ? checkedState[index] : false} man={index} handleClose={handleClose} handleFavorites={handleFavorites}/>
             } )}
         </Box>
         <Box display="flex" flexWrap="wrap" justifyContent="center" style={{ "height" : "100%", "backgroundColor" : "white" }} >

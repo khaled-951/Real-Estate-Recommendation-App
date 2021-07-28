@@ -28,7 +28,7 @@ router.post('/toggleFavorit', authorized, async (req, res) => {
         if(userFavList.properties.includes(req.body.propertyId))
         {
             userFavList.properties = userFavList.properties.filter( property => property.toString() !== req.body.propertyId );
-            console.log(userFavList.save());
+            userFavList.save();
             return res.status(200).send('Favorit Removed');
         }
         else if(!userFavList.properties.includes(req.body.propertyId))
