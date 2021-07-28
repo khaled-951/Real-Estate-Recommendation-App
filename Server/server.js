@@ -4,12 +4,14 @@ const dotenv = require('dotenv').config();
 const path = require('path');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const compression = require('compression');
 const logger = require('morgan');
 const users = require('./routes/users');
 const properties = require('./routes/properties');
 const favorit = require('./routes/favorites');
 const authorized = require('./middlewares/authorized');
 
+//app.use(compression());
 app.use(express.json());
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -17,6 +19,14 @@ app.use(logger('dev'));
 app.use('/api/user', users);
 app.use('/api/property', properties);
 app.use('/api/favorit', favorit);
+
+app.get('/*', (req, res) => {
+  res.sendFile('index.html');
+});
+
+app.get('/', (req, res) => {
+  return res.status(200).send(req.app.get('env'));
+});
 
 app.use(function(err, req, res, next) {
     // set locals, only providing error in development

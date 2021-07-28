@@ -13,6 +13,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import { useHistory } from 'react-router-dom';
 import ViewPropertyCard from './ViewPropertyCard';
+import axios from 'axios';
 
 const useStyles = makeStyles({
     root: {
@@ -40,9 +41,12 @@ const useStyles = makeStyles({
 export default function ShowPropertiesComponent(props){
     const history = useHistory();
     const classes = useStyles();
+    const [checkedState, setCheckedState] = React.useState(props.showProperties?.favorites || [false, false, false, false, false, false]);
     const [openSuccess, setOpenSuccess] = React.useState(false);
     const [openError, setOpenError] = React.useState(false);
     const [openDialog, setOpenDialog] = React.useState(false);
+
+    React.useEffect( () => { setCheckedState(props.showProperties?.favorites);  } , [props]);
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') { return; }
@@ -50,15 +54,17 @@ export default function ShowPropertiesComponent(props){
         setOpenError(false);
     };
 
-    const handleFavorites = (e) => {
+    const handleFavorites =(e, propertyId, key) => {
+      e.preventDefault();
         if(localStorage.getItem('authToken') !== null){
             handleClose();
-            if(e.target.checked === true)
-                setOpenSuccess(true);
-            else
-                setOpenError(true);
+            axios.post( process.env.REACT_APP_BACKEND_API + '/favorit/toggleFavorit', { propertyId }, 
+                { headers: { 'Authorization' : 'Bearer: ' + localStorage.getItem('authToken')} } )
+                  .then((data) => { 
+                  if(data.data === 'Favorit Added') {setCheckedState( (oldState) => { oldState[key] = true; return oldState;} ); setOpenSuccess(true);  }
+                   else if (data.data === 'Favorit Removed') {setCheckedState( (oldState) => { oldState[key] = false; return oldState;} );  setOpenError(true); } }  );
         }else{
-            e.target.checked = false ;
+            /*props.setMostViewedProperties( (data) => { return { ...data, ...data.favorites[key] = true } } )*/
             setOpenDialog(true);
         }
     };
@@ -75,23 +81,14 @@ export default function ShowPropertiesComponent(props){
         history.push("/login");
     };
 
-    /*<Box display="flex" flexWrap="wrap" justifyContent="center">
-            <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites} />
-            <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>
-            <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>
-            <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>
-            <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>
-            <ViewPropertyCard openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>
-        </Box>*/
-
     return (
     <>
     <Container >
         <h1 className={classes.hClass} >{ props.headerText }</h1>
         <Box display="flex" flexWrap="wrap" justifyContent="center">
-          {props.showProperties?.map( (property, index) => {
-            return <ViewPropertyCard key={index} property={property} openSuccess={openSuccess} openError={openError} 
-              handleClose={handleClose} handleFavorites={handleFavorites}/>
+          {props.showProperties?.data?.map( (property, index) => {
+            return <ViewPropertyCard key={index} property={property} checked={checkedState ? checkedState[index] : false} man={index} 
+              openSuccess={openSuccess} openError={openError} handleClose={handleClose} handleFavorites={handleFavorites}/>
           } )}
         </Box>
     </Container>

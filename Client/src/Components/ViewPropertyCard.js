@@ -38,7 +38,7 @@ export default function ViewPropertyCard(props) {
         <>
         <Grow in={true}>
             <Card raised={true} className={classes.root}>
-                <CardActionArea onClick={() => handleRedirect(props.property?._id || 1)}>
+                <CardActionArea onClick={() => handleRedirect(props.property?._id)}>
                     <CardMedia component="img" alt="Contemplative Reptile" height="140" image="/house.jpg" title="Contemplative Reptile" />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="h2">{ props.property?.price || "N/A" }</Typography>
@@ -52,7 +52,8 @@ export default function ViewPropertyCard(props) {
                     <Grid container direction="row" justifyContent="space-between" alignItems="center">
                         <Button size="small" color="primary" onClick={() => handleRedirect(props.property?._id || 1)} >View Property</Button>
                         <VisibilityIcon/><Typography >{ props.property?.views || "N/A" }</Typography>
-                        <FormControlLabel onClick={ props.handleFavorites } control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="checkedH" />} />
+                        <FormControlLabel checked={props.checked} onClick={ (e) => props.handleFavorites(e, props.property?._id, props.man) } 
+                            control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="checkedH" />} />
                     </Grid>
                 </CardActions>
             </Card>

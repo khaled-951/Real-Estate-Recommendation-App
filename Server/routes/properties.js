@@ -1,19 +1,44 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const authorized = require('../middlewares/authorized');
+const favoritSchema = require('../models/favorit');
+const Favorit = mongoose.model('favorites', favoritSchema);
 const propertySchema = require('../models/property');
 const Property = mongoose.model('properties', propertySchema);
 
-router.get('/getMostViewed', async (req, res) => {
-    return res.status(200).send(await Property.find().sort({ views: -1}).limit(6));
+router.get('/getMostViewed', authorized, async (req, res) => {
+    const mostViewed = await Property.find().sort({ views: -1}).limit(6) ;
+    if(!req.user) return res.status(200).send( { data: mostViewed, favorites: [] } );
+    else{
+        let ids = [] ;
+        mostViewed.forEach( property => { ids.push(property._id) } );
+        const userData = await Favorit.findOne( {"userId" :req.user.id}, { properties: 1, _id: 0} );
+        if(!userData) res.status(200).send( { data: mostViewed, favorites: [] } );
+        else{
+            let favorites = [] ;
+            ids.forEach( id => { favorites.push(userData.properties.includes(id)) } );
+            return res.status(200).send( { data: mostViewed, favorites } );
+        }
+    }
 });
 
-router.get('/getPropertyDetailsAndRecommended/:propId', async (req, res) => {
-    return res.status(200).send( { propertyDetails: await Property.findById(req.params.propId),
-        recommended: await Property.find().sort({ views: -1}).limit(6) } );
+router.get('/getPropertyDetailsAndRecommended/:propId', authorized, async (req, res) => {
+    const recommended = await Property.find().sort({ views: -1}).limit(6) ;
+    if(!req.user) return res.status(200).send( { propertyDetails: await Property.findById(req.params.propId), recommended, favorites: [] } );
+    else{
+        let ids = [] ;
+        recommended.forEach( property => { ids.push(property._id) } );
+        const userData = await Favorit.findOne( {"userId" :req.user.id}, { properties: 1, _id: 0} );
+        let favorites = [] ;
+        ids.forEach( id => { favorites.push(userData.properties.includes(id)) } );
+        return res.status(200).send( { propertyDetails: await Property.findById(req.params.propId),
+            data: await Property.find().sort({ views: -1}).limit(6), favorites } );
+    }
+    
 });
 
-router.post('/searchQuery/:page', async (req, res) => {
+router.post('/searchQuery/:page', authorized, async (req, res) => {
     let findQuery = {} ;
 
     if(req.body.searchQuery)
@@ -56,7 +81,7 @@ router.post('/searchQuery/:page', async (req, res) => {
     if( req.body.typeImm instanceof Array )
         findQuery = { ...findQuery, typeImm: { $in: req.body.typeImm }  } ;
 
-    console.log(findQuery);
+    //console.log(findQuery);
     //await Property.find(findQuery).skip(6 * Number(req.params.page) ).limit(6)
     const resu = await Property.aggregate( [ { $match: findQuery }, {
         "$facet": {
@@ -70,8 +95,16 @@ router.post('/searchQuery/:page', async (req, res) => {
         }
       } ] ) ;
       //console.log(resu[0].resultsCount[0].total);
-    return res.status(200).send({ results: resu[0]?.results,
-         resultsCount: resu[0]?.resultsCount[0]?.total});
+    if(!req.user)   return res.status(201).send({ results: resu[0]?.results, resultsCount: resu[0]?.resultsCount[0]?.total, favorites: []});
+    else
+    {
+        let ids = [] ;
+        resu[0]?.results.forEach( property => { ids.push(property._id) } );
+        const userData = await Favorit.findOne( {"userId" :req.user.id}, { properties: 1, _id: 0} );
+        let favorites = [] ;
+        ids.forEach( id => { favorites.push(userData.properties.includes(id)) } );
+        return res.status(200).send({ results: resu[0]?.results, resultsCount: resu[0]?.resultsCount[0]?.total, favorites: favorites});
+    }
     /*return res.status(200).send({ results: await Property.find(findQuery).skip(6 * Number(req.params.page) ).limit(6),
          resultsCount: await Property.countDocuments(findQuery)});*/
 });

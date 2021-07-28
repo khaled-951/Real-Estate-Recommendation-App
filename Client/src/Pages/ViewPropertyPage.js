@@ -10,15 +10,23 @@ export default function ViewPropertyPage() {
     const [searchQueryState, setSearchQueryState] = React.useState();
     const [propertyDetailsAndRecommended, setPropertyDetailsAndRecommended] = React.useState();
     const { propertyId } = useParams();
-    useEffect(() => { document.body.style.backgroundImage=''; 
+    /*useEffect(() => { document.body.style.backgroundImage=''; 
         axios.get(process.env.REACT_APP_BACKEND_API + '/property/getPropertyDetailsAndRecommended/' + propertyId)
-        .then(data => setPropertyDetailsAndRecommended(data.data))} , [propertyId]);
+        .then(data => setPropertyDetailsAndRecommended(data.data))} , [propertyId]);*/
+
+    useEffect(() => {document.body.style.backgroundImage='';
+        if(localStorage.getItem('authToken'))
+          axios.get(process.env.REACT_APP_BACKEND_API + '/property/getPropertyDetailsAndRecommended/' + propertyId
+          , {headers: {"Authorization": "Bearer: " + localStorage.getItem('authToken')}}).then( (data) => setPropertyDetailsAndRecommended(data.data));
+        else 
+          axios.get(process.env.REACT_APP_BACKEND_API + '/property/getPropertyDetailsAndRecommended/' + propertyId ).then( (data) => setPropertyDetailsAndRecommended(data.data));
+        } , [propertyId]);
     return (
         <>
             <Header searchQuery={searchQueryState} setSearchQueryState={(e) => setSearchQueryState(e)} showSearchInHeader={"true"} 
             isloggedIn={localStorage.getItem('authToken') !== null }/>
             <PropertyDetails property={propertyDetailsAndRecommended?.propertyDetails} />
-            <ShowPropertiesComponent showProperties={propertyDetailsAndRecommended?.recommended} headerText="Recommended For You" />
+            <ShowPropertiesComponent showProperties={propertyDetailsAndRecommended} headerText="Recommended For You" />
             <Footer/>
         </> 
     );
