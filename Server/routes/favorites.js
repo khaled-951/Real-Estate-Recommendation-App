@@ -15,6 +15,7 @@ router.post('/toggleFavorit', authorized, async (req, res) => {
     
     if(!foundProperty) return res.status(400).send('Property Does Not Exist');
     
+    if(!req.user) return res.status(400).send('Error');
     const userFavList = await Favorit.findOne({ userId: req.user.id });
     
     if( !userFavList )
@@ -38,7 +39,6 @@ router.post('/toggleFavorit', authorized, async (req, res) => {
             return res.status(200).send('Favorit Added');
         }
     }
-    return res.status(400).send('Error');
 });
 
 router.get('/getUserFavorites/:pageId', authorized, async (req, res) => {

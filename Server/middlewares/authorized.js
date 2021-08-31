@@ -8,7 +8,7 @@ async function authorized(req, res, next){
         req.user = await jwt.verify(req.get('Authorization').split(" ")[1], process.env.JWT_ACCESS_TOKEN, { algorithm: 'HS256' });
         next();
     }
-    catch(e) { return res.status(401).send('Token Expired Or You Need To Login'); }
+    catch(e) { req.user = null; return next() }
 }
 
 module.exports = authorized ;

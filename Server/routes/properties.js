@@ -25,7 +25,7 @@ router.get('/getMostViewed', authorized, async (req, res) => {
 
 router.get('/getPropertyDetailsAndRecommended/:propId', authorized, async (req, res) => {
     const recommended = await Property.find().sort({ views: -1}).limit(6) ;
-    if(!req.user) return res.status(200).send( { propertyDetails: await Property.findById(req.params.propId), recommended, favorites: [] } );
+    if(!req.user) return res.status(200).send( { propertyDetails: await Property.findById(req.params.propId), data: recommended, favorites: [] } );
     else{
         let ids = [] ;
         recommended.forEach( property => { ids.push(property._id) } );

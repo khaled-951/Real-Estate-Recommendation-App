@@ -47,11 +47,11 @@ router.post('/login', async (req, res) => {
 
 router.post('/verify', async (req, res) => {
     if( !req.get('Authorization') ) return res.status(400).send('Verify Your Inputs Please');
+    if( !req.get('Authorization').split(" ")[1] ) return res.status(400).send('Verify Your Inputs Please');
     try{
-        console.log(req.get('Authorization').split(" ")[1]);
         return res.status(200).send(await jwt.verify(req.get('Authorization').split(" ")[1], process.env.JWT_ACCESS_TOKEN, { algorithm: 'HS256' } ));
     }
-    catch(e) { return res.status(400).send('Token Expired'); }
+    catch(e) { return res.status(400).send('Verify Your Inputs Please'); }
 });
 
 module.exports = router ;

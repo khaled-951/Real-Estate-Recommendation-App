@@ -24,10 +24,6 @@ app.get('/*', (req, res) => {
   res.sendFile('index.html');
 });
 
-app.get('/', (req, res) => {
-  return res.status(200).send(req.app.get('env'));
-});
-
 app.use(function(err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
@@ -37,7 +33,6 @@ app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.send('error');
   });
-  
 
 mongoose.connect(process.env.MONGODB_URI,{useNewUrlParser: true, useUnifiedTopology: true}).catch(() => console.log('could not connect to DB'));
 app.listen(process.env.port);
