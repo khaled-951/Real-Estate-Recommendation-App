@@ -43,7 +43,9 @@ export default function LoginPage() {
   }
 
   useEffect(() => {
-        document.body.style.backgroundImage="url(/loginbackground.jpg)";
+    if( localStorage.getItem('authToken') ) axios.post(process.env.REACT_APP_BACKEND_API + '/user/verify', null,
+      {headers: {"Authorization": "Bearer: " + localStorage.getItem('authToken')}}).then( data => {if(data.status === 200) history.push('/') });
+    document.body.style.backgroundImage="url(/loginbackground.jpg)";
     } );
 
   return (

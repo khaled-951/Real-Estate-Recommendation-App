@@ -52,7 +52,7 @@ export default function ViewPropertyCard(props) {
                     <Grid container direction="row" justifyContent="space-between" alignItems="center">
                         <Button size="small" color="primary" onClick={() => handleRedirect(props.property?._id || 1)} >View Property</Button>
                         <VisibilityIcon/><Typography >{ props.property?.views || "N/A" }</Typography>
-                        <FormControlLabel checked={props.checked} onClick={ (e) => props.handleFavorites(e, props.property?._id, props.man) } 
+                        <FormControlLabel checked={props.checked || false } onClick={ (e) => props.handleFavorites(e, props.property?._id, props.man) } 
                             control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="checkedH" />} />
                     </Grid>
                 </CardActions>

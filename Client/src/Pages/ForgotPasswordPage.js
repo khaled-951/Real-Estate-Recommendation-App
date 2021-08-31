@@ -8,7 +8,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
-import { Link } from 'react-router-dom' ;
+import { Link, useHistory } from 'react-router-dom' ;
+import axios from 'axios';
 
 const useStyles = makeStyles({
   root: {
@@ -21,8 +22,11 @@ const useStyles = makeStyles({
 });
 
 export default function ForgotPasswordPage() {
+  const history = useHistory();
   const classes = useStyles();
   useEffect(() => {
+    if( localStorage.getItem('authToken') ) axios.post(process.env.REACT_APP_BACKEND_API + '/user/verify', null,
+      {headers: {"Authorization": "Bearer: " + localStorage.getItem('authToken')}}).then( data => {if(data.status === 200) history.push('/') });
         document.body.style.backgroundImage="url(/loginbackground.jpg)";
     } );
 

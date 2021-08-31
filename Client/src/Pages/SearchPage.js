@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import SearchResultsComponent from '../Components/SearchResultsComponent';
 import { Box } from '@material-ui/core';
 import FiltersList from '../Components/FiltersList';
+import axios from 'axios';
 
 const states = ['TUNIS', 'ARIANA', 'SOUSSE', 'MONASTIR', 'NABEUL', 'GAFSA', 'GABES', 'KASSERINE', 'JENDOUBA', 'BIZERTE', 'TOZEUR', 'KEIROUAN', 'BEJA'];
 const propertyTypes = ['appartement', 'commerce', 'terrain', 'autres', 'maison'];
@@ -23,6 +24,7 @@ export default function SearchPage(){
     const [chipData, setChipData] = React.useState( searchQueryState ? [{ key: 0, label: 'SearchQuery: ' + searchQueryState }] : [] );
     const [bedroomsState, setBedroomsState] = React.useState();
     const [resultsCount, setResultsCount] = React.useState(0);
+    const [loggedIn, setLoggedIn] = React.useState(false);
 
     const handleStateNamesChange = (event) => { setStateNames(event.target.value); };
     const handlePropertyTypesChange = (event) => { setPropertyTypesState(event.target.value); };
@@ -56,11 +58,14 @@ export default function SearchPage(){
     const handleChipUpdateSync = (chipToUpdate)  => { setChipData( (chips) => { return [...(chips.filter((chip) => chip.key !== chipToUpdate.key)), chipToUpdate] } ); };
     const handleChipDeleteSync = (chipToDelete) => { setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key)); };
 
+    React.useEffect(() => {if( localStorage.getItem('authToken') ) axios.post(process.env.REACT_APP_BACKEND_API + '/user/verify', null,
+    {headers: {"Authorization": "Bearer: " + localStorage.getItem('authToken')}}).then( data => {if(data.status === 200) setLoggedIn(true) }).catch(err => localStorage.removeItem('authToken') );}, []);
+
     return (
         <>
             <Header showSearchInHeader={"true"} searchQuery={searchQueryState} 
             setSearchQueryState={(e) => { if(!e) handleChipDeleteSync({ key: 0 }); else handleChipUpdateSync({ key: 0, label: 'Search Query: ' + e });setSearchQueryState(e) } } 
-            isloggedIn={localStorage.getItem('authToken') !== null } />
+            isloggedIn={loggedIn } />
             <AppliedFilters handleChipAdd={handleChipAdd} handleChipDelete={handleChipDelete} chipData={chipData} />
             <Box display="flex" flexWrap="wrap" justifyContent="center">
                 <FiltersList airConditionedState={ airConditionedState } resultsCount={resultsCount}
