@@ -35,4 +35,4 @@ app.use(function(err, req, res, next) {
   });
 
 mongoose.connect(process.env.MONGODB_URI,{useNewUrlParser: true, useUnifiedTopology: true}).catch(() => console.log('could not connect to DB'));
-app.listen(process.env.port);
+app.listen(443);
